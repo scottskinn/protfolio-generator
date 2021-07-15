@@ -1,11 +1,12 @@
 const inquirer = require('inquirer');
 // console.log(inquirer);
 
-// const fs = require('fs');
+const fs = require('fs');
 
-// const generatePage = require('./src/page-template.js');
+const generatePage = require('./src/page-template.js');
 
-// const pageHTML = generatePage(name, github);
+
+// const pageHTML = generatePage(mockData);
 
 // fs.writeFile('./index.html', generatePage(name, github) , err => {
 //   if (err) throw new Error(err);
@@ -26,6 +27,19 @@ const promptUser = () => {
                 return false;
               }
             }
+        },                
+        {
+            type: 'input',
+            name: 'github',
+            message: 'Enter your github Username',
+            validate: githubInput => {
+                if (githubInput) {
+                    return true;
+                } else {
+                    console.log('Please Enter your github Username!')
+                    return false;
+                }
+            }
         },
         {
             type: 'confirm',
@@ -44,24 +58,6 @@ const promptUser = () => {
                     return false;
                 }
             }
-        },
-        {
-            type: 'input',
-            name: 'github',
-            message: 'Enter your github Username',
-            validate: githubInput => {
-                if (githubInput) {
-                    return true;
-                } else {
-                    console.log('Please Enter your github Username!')
-                    return false;
-                }
-            }
-        },
-        {
-            type: 'input',
-            name: 'about',
-            message: 'Provide some information about yourself:'
         }
             
     ]);
@@ -84,10 +80,10 @@ Add a new Project
     return inquirer.prompt([
         {
         type: 'input',
-        name: 'name1',
+        name: 'name',
         message: 'What is the name of your project?',
-        validate: name1input => {
-            if (name1input){
+        validate: nameInput => {
+            if (nameInput){
             return true;
             } else {
                 console.log('Please enter project name!')
@@ -153,10 +149,17 @@ Add a new Project
 
 };
 
+
 promptUser()
     .then(promptProject)
     .then(portfolioData => {
-        console.log(portfolioData);
+        const pageHTML = generatePage(portfolioData);
+
+        fs.writeFile('./index.html', pageHTML, err => {
+          if (err) throw new Error(err);
+
+          console.log('Portfolio complete! Check out index.html to see the output!');
+        });
     });
 
 
