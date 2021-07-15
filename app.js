@@ -28,6 +28,24 @@ const promptUser = () => {
             }
         },
         {
+            type: 'confirm',
+            name: 'confirmAbout',
+            message: 'Would you like to enter some information about yourself for an "About" section?',
+            default: true
+        },
+        {
+            type: 'input',
+            name: 'about',
+            message: 'Provide some information about yourself:',
+            when: ({ confirmAbout }) => {
+                if (confirmAbout) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        },
+        {
             type: 'input',
             name: 'github',
             message: 'Enter your github Username',
@@ -120,16 +138,18 @@ Add a new Project
             name: 'confirmAddProject',
             message: 'Would you like to enter another project?',
             default: false
-        }        
-    ])
-    .then(projectData => {
-        portfolioData.projects.push(projectData);
-        if (projectData.confirmAddProject) {
-          return promptProject(portfolioData);
-        } else {
-          return portfolioData;
         }
-    });
+        
+    ])
+        .then(projectData => {
+            portfolioData.projects.push(projectData);
+            if (projectData.confirmAddProject) {
+            return promptProject(portfolioData);
+            } else {
+            return portfolioData;
+            }
+        });
+
 
 };
 
